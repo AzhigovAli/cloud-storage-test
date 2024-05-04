@@ -5,6 +5,7 @@ const { Content } = Layout;
 import { Layout } from 'antd';
 import { Upload, Image } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
+import axios from '../../api/axios';
 
 export const FilesTable = () => {
   const [fileList, setFileList] = useState([]);
@@ -44,6 +45,7 @@ export const FilesTable = () => {
             action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
             listType="picture-card"
             fileList={fileList}
+            onRemove={() => axios.delete(`/file/${fileList.id}`)}
             onPreview={handlePreview}
             onChange={handleChange}>
             {uploadButton}

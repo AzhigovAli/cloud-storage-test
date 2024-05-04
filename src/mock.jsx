@@ -9,6 +9,7 @@ import { Menu } from 'antd';
 
 const handleLogout = () => {
   window.location.reload();
+  window.location.pathname = '/';
   localStorage.removeItem('token');
 };
 
@@ -18,13 +19,16 @@ export const menu = (
       Logout
     </Menu.Item>
     <Menu.Divider />
-    <Menu.Item onClick={handleLogout} key="changePassword" icon={<KeyOutlined />}>
+    <Menu.Item
+      onClick={() => (window.location.href = '/changePassword')}
+      key="changePassword"
+      icon={<KeyOutlined />}>
       Change Password
     </Menu.Item>
     <Menu.Divider />
     <Menu.Item
       key="profile"
-      onClick={() => (window.location.pathname = '/profile')}
+      onClick={() => (window.location.href = '/profile')}
       icon={<UserSwitchOutlined />}>
       Profile
     </Menu.Item>

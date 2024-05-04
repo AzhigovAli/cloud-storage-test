@@ -9,6 +9,8 @@ import { FilesTable } from './component/filesTable/filesTable';
 const { Header, Content, Sider } = Layout;
 import { UserOutlined } from '@ant-design/icons';
 import { Layout, Menu, theme, Typography, Avatar, Dropdown } from 'antd';
+import { Profile } from './pages/profile/Profile';
+import { ChangePassword } from './pages/changePassword/ChangePassword';
 
 const App = () => {
   const [users, setUsers] = useState([]);
@@ -53,49 +55,57 @@ const App = () => {
           </div>
         </Dropdown>
       </Header>
-      {!token ? (
+      {window.location.pathname === '/profile' ? <Profile /> : null}
+      {window.location.pathname === '/changePassword' ? <ChangePassword /> : null}
+      {!token &&
+      window.location.pathname !== '/profile' &&
+      window.location.pathname !== '/changePassword' ? (
         <Login />
       ) : (
-        <Content
-          style={{
-            margin: '150px 0px',
-            padding: '0 300px',
-          }}>
-          <Layout
+        token &&
+        window.location.pathname !== '/profile' &&
+        window.location.pathname !== '/changePassword' && (
+          <Content
             style={{
-              padding: '12px 0',
-              background: colorBgContainer,
-              borderRadius: borderRadiusLG,
+              margin: '150px 0px',
+              padding: '0 300px',
             }}>
-            <Sider
+            <Layout
               style={{
+                padding: '12px 0',
                 background: colorBgContainer,
-              }}
-              width={200}>
-              <Menu
-                mode="inline"
-                selectedKeys={[selectedMenuItem]}
-                defaultOpenKeys={['sub1']}
-                onClick={handleMenuClick}
-                style={{
-                  height: '100%',
-                }}
-                items={sideBarItems}
-              />
-            </Sider>
-            <Content
-              style={{
-                padding: '0 24px',
-                minHeight: 280,
+                borderRadius: borderRadiusLG,
               }}>
-              {selectedMenuItem === '1' ? (
-                <UsersTable users={users} columns={columns} onDelete={handleDelete} />
-              ) : (
-                <FilesTable />
-              )}
-            </Content>
-          </Layout>
-        </Content>
+              <Sider
+                style={{
+                  background: colorBgContainer,
+                }}
+                width={200}>
+                <Menu
+                  mode="inline"
+                  selectedKeys={[selectedMenuItem]}
+                  defaultOpenKeys={['sub1']}
+                  onClick={handleMenuClick}
+                  style={{
+                    height: '100%',
+                  }}
+                  items={sideBarItems}
+                />
+              </Sider>
+              <Content
+                style={{
+                  padding: '0 24px',
+                  minHeight: 280,
+                }}>
+                {selectedMenuItem === '1' ? (
+                  <UsersTable users={users} columns={columns} onDelete={handleDelete} />
+                ) : (
+                  <FilesTable />
+                )}
+              </Content>
+            </Layout>
+          </Content>
+        )
       )}
     </Layout>
   );
