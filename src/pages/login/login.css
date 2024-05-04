@@ -1,0 +1,23 @@
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 150px;
+}
+
+.login-form {
+  width: 325px;
+  padding: 20px;
+  border: 1px solid #d9d9d9;
+  border-radius: 5px;
+  background-color: #f0f2f5;
+}
+
+.toggle-container {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.toggle-container span {
+  margin-right: 10px;
+}
