@@ -1,56 +1,62 @@
-import './profile.css';
-const { Content, Sider } = Layout;
-import React, { useEffect, useState } from 'react';
-import { Button, Input, Layout, theme } from 'antd';
-import { Form } from 'antd';
+import './profile.css'
+import axios from '../../api/axios'
+import React, { useEffect, useState } from 'react'
 
-import axios from '../../api/axios';
+import { Form } from 'antd'
+import { Button, Input, Layout, theme } from 'antd'
+import { Link } from 'react-router-dom'
 
 export const Profile = () => {
-  const [user, setUser] = useState([]);
+  const [user, setUser] = useState([])
   const {
     token: { colorBgContainer, borderRadiusLG },
-  } = theme.useToken();
+  } = theme.useToken()
 
   useEffect(() => {
     try {
-      axios.get('/users').then((data) => {
-        setUser(data.data);
-      });
+      axios.get(`/users/${localStorage.getItem('id')}`).then((data) => {
+        setUser([data.data])
+        console.log(user)
+      })
     } catch (error) {
-      console.log('Error fetching users:', error);
+      console.log('Error fetching users:', error)
+      console.log(user)
     }
-  }, []);
+  }, [])
+  console.log(user)
 
   return (
-    <Layout
-      style={{
-        padding: '12px 0',
-        background: colorBgContainer,
-        borderRadius: borderRadiusLG,
-      }}>
+    <Layout className="profile-layout">
       <div className="login-container">
-        <Form name="basic" initialValues={{ remember: true }} className="login-form">
+        <Form
+          name="basic"
+          initialValues={{ remember: true }}
+          className="login-form"
+        >
           <Form.Item label="Email">
-            <Input placeholder="JGx1X@example.com" value={user.map((user) => user.email)} />
+            <Input
+              placeholder="JGx1X@example.com"
+              value={user.map((user) => user.email)}
+            />
           </Form.Item>
           <Form.Item label="Full Name">
-            <Input placeholder="John Doe" value={user.map((user) => user.fullname)} />
+            <Input
+              placeholder="John Doe"
+              value={user.map((user) => user.fullname)}
+            />
           </Form.Item>
           <Form.Item label="Password">
             <Input.Password value={user.map((user) => user.password)} />
           </Form.Item>
           <Form.Item>
-            <Button
-              style={{ width: '100%', marginTop: '10px' }}
-              onClick={() => (window.location.href = '/')}
-              type="primary"
-              htmlType="submit">
-              Back to Home
-            </Button>
+            <Link to="/">
+              <Button className="back-button" type="primary" htmlType="submit">
+                Back to Home
+              </Button>
+            </Link>
           </Form.Item>
         </Form>
       </div>
     </Layout>
-  );
-};
+  )
+}

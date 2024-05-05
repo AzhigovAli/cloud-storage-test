@@ -4,14 +4,14 @@ import {
   UserSwitchOutlined,
   KeyOutlined,
   LogoutOutlined,
-} from '@ant-design/icons';
-import { Menu } from 'antd';
+} from '@ant-design/icons'
+import { Menu } from 'antd'
+import { Link } from 'react-router-dom'
 
 const handleLogout = () => {
-  window.location.reload();
-  window.location.pathname = '/';
-  localStorage.removeItem('token');
-};
+  window.location.reload()
+  localStorage.removeItem('token')
+}
 
 export const menu = (
   <Menu>
@@ -19,21 +19,19 @@ export const menu = (
       Logout
     </Menu.Item>
     <Menu.Divider />
-    <Menu.Item
-      onClick={() => (window.location.href = '/changePassword')}
-      key="changePassword"
-      icon={<KeyOutlined />}>
-      Change Password
-    </Menu.Item>
+    <Link to="/changePassword">
+      <Menu.Item key="changePassword" icon={<KeyOutlined />}>
+        Change Password
+      </Menu.Item>
+    </Link>
     <Menu.Divider />
-    <Menu.Item
-      key="profile"
-      onClick={() => (window.location.href = '/profile')}
-      icon={<UserSwitchOutlined />}>
-      Profile
-    </Menu.Item>
+    <Link to="/profile">
+      <Menu.Item key="profile" icon={<UserSwitchOutlined />}>
+        Profile
+      </Menu.Item>
+    </Link>
   </Menu>
-);
+)
 
 export const columns = [
   {
@@ -51,7 +49,7 @@ export const columns = [
     dataIndex: 'fullname',
     key: 'fullname',
   },
-];
+]
 
 export const sideBarItems = [
   {
@@ -64,4 +62,4 @@ export const sideBarItems = [
     icon: <FileImageOutlined />,
     label: 'files',
   },
-];
+]

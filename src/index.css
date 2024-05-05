@@ -3,16 +3,16 @@ body {
   margin: 0 auto;
 }
 
-.header {
-  display: flex;
-  align-items: center;
-  position: relative;
-  justify-content: space-between;
+.header-text {
+  color: #fff;
+  font-size: 28px;
 }
 
-.login {
-  gap: 8px;
-  display: flex;
-  cursor: pointer;
-  align-items: center;
+.user-name {
+  color: #fff;
+}
+
+.user-avatar {
+  color: #f56a00;
+  background-color: #fde3cf;
 }
