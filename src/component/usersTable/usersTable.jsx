@@ -12,6 +12,7 @@ import {
   Button,
   Upload,
 } from 'antd'
+import { CopyOutlined } from '@ant-design/icons'
 
 const { Content } = Layout
 const { Search } = Input
@@ -48,6 +49,7 @@ export const UsersTable = ({ users, columns, onDelete }) => {
     if (avatarFile) {
       const formData = new FormData()
       formData.append('avatar', avatarFile)
+      console.log(avatarFile)
       await changeAvatar(editingUser.id, formData)
     }
     await updateUser(editingUser.id, editingUser)
@@ -163,27 +165,57 @@ export const UsersTable = ({ users, columns, onDelete }) => {
                 </p>
                 <p>
                   <strong>Phone:</strong>{' '}
-                  <Input
-                    name="phone"
-                    value={editingUser.phone}
-                    onChange={handleInputChange}
-                  />
+                  <div className="email-input">
+                    <Input
+                      name="phone"
+                      value={editingUser.phone}
+                      onChange={handleInputChange}
+                    />
+                    <Button
+                      type="text"
+                      icon={<CopyOutlined />}
+                      onClick={() => {
+                        navigator.clipboard.writeText(editingUser.phone)
+                        message.success('Phone copied to clipboard')
+                      }}
+                    />
+                  </div>
                 </p>
                 <p>
                   <strong>Full Name:</strong>{' '}
-                  <Input
-                    name="fullname"
-                    value={editingUser.fullname}
-                    onChange={handleInputChange}
-                  />
+                  <div className="email-input">
+                    <Input
+                      name="fullname"
+                      value={editingUser.fullname}
+                      onChange={handleInputChange}
+                    />
+                    <Button
+                      type="text"
+                      icon={<CopyOutlined />}
+                      onClick={() => {
+                        navigator.clipboard.writeText(editingUser.fullname)
+                        message.success('Full Name copied to clipboard')
+                      }}
+                    />
+                  </div>
                 </p>
                 <p>
-                  <strong>Email:</strong>{' '}
-                  <Input
-                    name="email"
-                    value={editingUser.email}
-                    onChange={handleInputChange}
-                  />
+                  <strong>Email:</strong>
+                  <div className="email-input">
+                    <Input
+                      name="email"
+                      value={editingUser.email}
+                      onChange={handleInputChange}
+                    />
+                    <Button
+                      type="text"
+                      icon={<CopyOutlined />}
+                      onClick={() => {
+                        navigator.clipboard.writeText(editingUser.email)
+                        message.success('Email copied to clipboard')
+                      }}
+                    />
+                  </div>
                 </p>
               </div>
             )}

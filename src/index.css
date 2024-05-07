@@ -16,3 +16,9 @@ body {
   color: #f56a00;
   background-color: #fde3cf;
 }
+
+.user_avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}

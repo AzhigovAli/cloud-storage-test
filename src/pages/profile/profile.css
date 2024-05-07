@@ -8,3 +8,26 @@
   background: #ffffff;
   border-radius: 8px;
 }
+
+.user-avatar {
+  display: flex;
+  margin: 0 auto 24px;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  font-size: 50px;
+}
+
+.user-avatar svg {
+  width: 40px;
+  height: 40px;
+}
+
+.data-user {
+  padding-top: 5px;
+}
+
+.upload-avatar {
+  display: flex;
+  justify-content: center;
+}

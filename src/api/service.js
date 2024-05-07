@@ -53,3 +53,12 @@ export const getFiles = async () => {
     throw error
   }
 }
+
+export const deleteFile = async (id) => {
+  try {
+    const { data } = await axios.delete(`/file/${id}`)
+    return data
+  } catch (error) {
+    console.log('Error deleting file:', error)
+  }
+}
