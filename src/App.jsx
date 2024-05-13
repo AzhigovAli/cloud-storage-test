@@ -14,6 +14,7 @@ const App = () => {
   const token = localStorage.getItem('token')
   const userAvatar = localStorage.getItem('userAvatar')
   const { originalname } = JSON.parse(userAvatar)
+
   return (
     <>
       <Header className="header">

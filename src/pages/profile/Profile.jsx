@@ -5,16 +5,17 @@ import { Avatar, Form, Button, Layout, Typography, message, Upload } from 'antd'
 import { Link } from 'react-router-dom'
 import { UserOutlined } from '@ant-design/icons'
 import { changeAvatar } from '../../api/service'
-
 const { Paragraph } = Typography
 
 export const Profile = () => {
   const [user, setUser] = useState(null)
-  const [email, setEmail] = useState('')
-  const [fullname, setFullname] = useState('')
-  const [password, setPassword] = useState('')
-  const [phone, setPhone] = useState('')
-  const [avatarFile, setAvatarFile] = useState(null)
+  const [fields, setFields] = useState({
+    email: '',
+    fullname: '',
+    password: '',
+    phone: '',
+    avatarFile: null,
+  })
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -22,50 +23,34 @@ export const Profile = () => {
         const response = await axios.get(`/users/${localStorage.getItem('id')}`)
         const userData = response.data
         setUser(userData)
-        setEmail(userData.email)
-        setFullname(userData.fullname)
-        setPassword(userData.password)
-        setPhone(userData.phone)
+        setFields({
+          email: userData.email,
+          fullname: userData.fullname,
+          password: userData.password,
+          phone: userData.phone,
+          avatarFile: null,
+        })
       } catch (error) {
         console.log('Error fetching user:', error)
       }
     }
-
     fetchUser()
   }, [])
 
-  const handleEmailChange = (newEmail) => {
-    setEmail(newEmail)
-  }
-
-  const handleFullnameChange = (newFullname) => {
-    setFullname(newFullname)
-  }
-
-  const handlePasswordChange = (newPassword) => {
-    setPassword(newPassword)
-  }
-
-  const handlePhoneChange = (newPhone) => {
-    setPhone(newPhone)
-  }
-
   const handleAvatarChange = async (event) => {
     const file = event.target.files[0]
-    setAvatarFile(file)
+    setFields({ ...fields, avatarFile: file })
   }
 
   const updateUser = async () => {
     try {
       await axios.put(`/users/${localStorage.getItem('id')}`, {
-        email,
-        fullname,
-        password,
-        phone,
+        email: fields.email,
+        fullname: fields.fullname,
+        password: fields.password,
+        phone: fields.phone,
       })
-      await changeAvatar(user.id, avatarFile)
       message.success('User updated successfully')
-      console.log('User updated successfully')
     } catch (error) {
       message.error('Error updating user')
       console.log('Error updating user:', error)
@@ -80,10 +65,10 @@ export const Profile = () => {
           initialValues={{ remember: true }}
           className="login-form"
         >
-          {avatarFile ? (
+          {fields.avatarFile ? (
             <Avatar
               className="user-avatar"
-              src={URL.createObjectURL(avatarFile)}
+              src={URL.createObjectURL(fields.avatarFile)}
             />
           ) : (
             <Avatar
@@ -97,8 +82,9 @@ export const Profile = () => {
             <Upload
               className="upload-avatar"
               accept="image/*"
-              beforeUpload={(file) => {
+              beforeUpload={async (file) => {
                 handleAvatarChange({ target: { files: [file] } })
+                await changeAvatar(localStorage.getItem('id'), file)
                 return false
               }}
               showUploadList={false}
@@ -109,34 +95,42 @@ export const Profile = () => {
           <Form.Item label="Email">
             <Paragraph
               className="data-user"
-              editable={{ onChange: handleEmailChange }}
+              editable={{
+                onChange: (value) => setFields({ ...fields, email: value }),
+              }}
             >
-              {email}
+              {fields.email}
             </Paragraph>
           </Form.Item>
           <Form.Item label="Full Name">
             <Paragraph
               className="data-user"
-              editable={{ onChange: handleFullnameChange }}
+              editable={{
+                onChange: (value) => setFields({ ...fields, fullname: value }),
+              }}
             >
-              {fullname}
+              {fields.fullname}
             </Paragraph>
           </Form.Item>
           <Form.Item label="Password">
             <Paragraph
               className="data-user"
-              editable={{ onChange: handlePasswordChange }}
+              editable={{
+                onChange: (value) => setFields({ ...fields, password: value }),
+              }}
             >
-              {password}
+              {fields.password}
             </Paragraph>
           </Form.Item>
           <Form.Item label="Phone">
             <Paragraph
               className="data-user"
-              editable={{ onChange: handlePhoneChange }}
+              editable={{
+                onChange: (value) => setFields({ ...fields, phone: value }),
+              }}
               type="number"
             >
-              {phone}
+              {fields.phone}
             </Paragraph>
           </Form.Item>
           <Form.Item>

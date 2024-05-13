@@ -1,8 +1,8 @@
 import React from 'react'
 import './changePassword.css'
 import axios from '../../api/axios'
-import { Form, Input, Button, message } from 'antd'
 import { onFinishFailed } from '../../api/service'
+import { Form, Input, Button, message } from 'antd'
 
 export const ChangePassword = () => {
   const onFinish = async (values) => {
@@ -29,7 +29,6 @@ export const ChangePassword = () => {
         <div>
           <span>Change Password</span>
         </div>
-
         <Form.Item
           label="Password"
           name="password"

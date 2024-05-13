@@ -44,6 +44,14 @@ export const changeAvatar = async (id, avatar) => {
   }
 }
 
+export const getBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => resolve(reader.result)
+    reader.onerror = (error) => reject(error)
+  })
+
 export const getFiles = async () => {
   try {
     const { data } = await axios.get('/file')

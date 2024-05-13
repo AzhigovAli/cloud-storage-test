@@ -7,15 +7,11 @@ import { UsersTable } from '../../component/usersTable/usersTable'
 import { FilesTable } from '../../component/filesTable/filesTable'
 
 const { Content, Sider } = Layout
-import { Layout, Menu, theme } from 'antd'
+import { Layout, Menu } from 'antd'
 
 const Home = () => {
   const [users, setUsers] = useState([])
   const [selectedMenuItem, setSelectedMenuItem] = useState('1')
-
-  const {
-    token: { colorBgContainer, borderRadiusLG },
-  } = theme.useToken()
   const token = localStorage.getItem('token')
 
   function handleMenuClick(item) {

@@ -89,6 +89,11 @@ export const UsersTable = ({ users, columns, onDelete }) => {
     setModalVisible(true)
   }
 
+  const copyText = (type) => {
+    navigator.clipboard.writeText(type)
+    message.success('Full Name copied to clipboard')
+  }
+
   const columnsWithActions = [
     ...columns,
     {
@@ -175,8 +180,7 @@ export const UsersTable = ({ users, columns, onDelete }) => {
                       type="text"
                       icon={<CopyOutlined />}
                       onClick={() => {
-                        navigator.clipboard.writeText(editingUser.phone)
-                        message.success('Phone copied to clipboard')
+                        copyText(editingUser.phone)
                       }}
                     />
                   </div>
@@ -191,11 +195,10 @@ export const UsersTable = ({ users, columns, onDelete }) => {
                     />
                     <Button
                       type="text"
-                      icon={<CopyOutlined />}
                       onClick={() => {
-                        navigator.clipboard.writeText(editingUser.fullname)
-                        message.success('Full Name copied to clipboard')
+                        copyText(editingUser.fullname)
                       }}
+                      icon={<CopyOutlined />}
                     />
                   </div>
                 </p>
@@ -211,8 +214,7 @@ export const UsersTable = ({ users, columns, onDelete }) => {
                       type="text"
                       icon={<CopyOutlined />}
                       onClick={() => {
-                        navigator.clipboard.writeText(editingUser.email)
-                        message.success('Email copied to clipboard')
+                        copyText(editingUser.email)
                       }}
                     />
                   </div>

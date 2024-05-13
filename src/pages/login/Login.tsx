@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
 import './login.css'
 import axios from '../../api/axios'
-import { Form, Input, Button, message } from 'antd'
+import React, { useState } from 'react'
 import { onFinishFailed } from '../../api/service'
+import { Form, Input, Button, message } from 'antd'
 
 export const Login = () => {
   const [isRegistering, setIsRegistering] = useState(false)

@@ -1,19 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { deleteFile, getFiles } from '../../api/service'
-const { Content } = Layout
 import './filesTable.css'
+const { Content } = Layout
+import { deleteFile, getFiles, getBase64 } from '../../api/service'
 
-import { Layout } from 'antd'
 import { Upload, Image } from 'antd'
+import { Layout, message } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
-
-const getBase64 = (file) =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.readAsDataURL(file)
-    reader.onload = () => resolve(reader.result)
-    reader.onerror = (error) => reject(error)
-  })
 
 export const FilesTable = () => {
   const [fileList, setFileList] = useState([])
@@ -40,9 +32,13 @@ export const FilesTable = () => {
   )
 
   const handleDeleteFile = async (file) => {
-    console.log(file.id)
-    console.log(file.response)
-    await deleteFile(file.id || file.response.id)
+    try {
+      await deleteFile(file.id || file.response.id)
+      message.success('File deleted successfully')
+    } catch (error) {
+      message.error('Error deleting file')
+      console.log('Error deleting file:', error)
+    }
   }
 
   useEffect(() => {
