@@ -1,28 +1,50 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import './filesTable.css'
-const { Content } = Layout
-import { deleteFile, getFiles, getBase64 } from '../../api/service'
-
-import { Upload, Image } from 'antd'
-import { Layout, message } from 'antd'
+import { Layout, message, Upload, Image } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
+import { deleteFile, getFiles, getBase64 } from '../../api/service'
+import { create } from 'zustand'
+
+const { Content } = Layout
+
+export const useFilesTableStore = create((set) => ({
+  fileList: [],
+  previewImage: '',
+  previewOpen: false,
+  setPreviewOpen: (previewOpen) => set({ previewOpen }),
+  setPreviewImage: (previewImage) => set({ previewImage }),
+  setFileList: (fileList) => set({ fileList }),
+  handlePreview: async (file) => {
+    if (!file.url && !file.preview) {
+      const previewImage = await getBase64(file.originFileObj)
+      set({ previewImage, previewOpen: true })
+    } else {
+      set({ previewImage: file.url || file.preview, previewOpen: true })
+    }
+  },
+  handleChange: ({ fileList }) => set({ fileList }),
+  handleDeleteFile: async (file) => {
+    try {
+      await deleteFile(file.id || file.response.id)
+      message.success('File deleted successfully')
+    } catch (error) {
+      message.error('Error deleting file')
+      console.log('Error deleting file:', error)
+    }
+  },
+}))
 
 export const FilesTable = () => {
-  const [fileList, setFileList] = useState([])
-  const [previewImage, setPreviewImage] = useState('')
-  const [previewOpen, setPreviewOpen] = useState(false)
-
-  const handlePreview = async (file) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj)
-    }
-    setPreviewImage(file.url || file.preview)
-    setPreviewOpen(true)
-  }
-
-  const handleChange = ({ fileList }) => {
-    setFileList(fileList)
-  }
+  const {
+    fileList,
+    previewImage,
+    previewOpen,
+    handlePreview,
+    handleChange,
+    handleDeleteFile,
+    setFileList,
+    setPreviewOpen,
+  } = useFilesTableStore()
 
   const uploadButton = (
     <div>
@@ -31,20 +53,16 @@ export const FilesTable = () => {
     </div>
   )
 
-  const handleDeleteFile = async (file) => {
-    try {
-      await deleteFile(file.id || file.response.id)
-      message.success('File deleted successfully')
-    } catch (error) {
-      message.error('Error deleting file')
-      console.log('Error deleting file:', error)
-    }
-  }
-
   useEffect(() => {
-    getFiles().then((data) => {
-      setFileList(data)
-    })
+    const fetchData = async () => {
+      try {
+        const data = await getFiles()
+        setFileList(data)
+      } catch (error) {
+        console.error('Error fetching files:', error)
+      }
+    }
+    fetchData()
   }, [])
 
   return (
@@ -63,13 +81,10 @@ export const FilesTable = () => {
           </Upload>
           {previewImage && (
             <Image
-              wrapperStyle={{
-                display: 'none',
-              }}
+              wrapperStyle={{ display: 'none' }}
               preview={{
                 visible: previewOpen,
-                onVisibleChange: (visible) => setPreviewOpen(visible),
-                afterOpenChange: (visible) => !visible && setPreviewImage(''),
+                onVisibleChange: setPreviewOpen,
               }}
               src={previewImage}
             />

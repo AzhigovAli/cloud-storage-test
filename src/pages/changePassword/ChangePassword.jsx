@@ -3,26 +3,34 @@ import './changePassword.css'
 import axios from '../../api/axios'
 import { onFinishFailed } from '../../api/service'
 import { Form, Input, Button, message } from 'antd'
+import { create } from 'zustand'
 
-export const ChangePassword = () => {
-  const onFinish = async (values) => {
+export const useChangePasswordStore = create((set) => ({
+  password: '',
+  onFinish: async (password) => {
     try {
-      const { data } = await axios.patch(`/auth/reset-password`, values)
+      const { data } = await axios.patch(`/auth/reset-password`, password)
       message.success('Success!')
-      localStorage.setItem('id', data.id)
       window.location.href = '/'
+      return data
     } catch (error) {
       console.error('Ошибка при отправке запроса:', error)
       message.error('Error!')
     }
-  }
+  },
+}))
 
+export const ChangePassword = () => {
+  const { onFinish } = useChangePasswordStore()
+  if (!localStorage.getItem('token')) {
+    window.location.href = '/'
+  }
   return (
     <div className="login-container">
       <Form
         name="basic"
         initialValues={{ remember: true }}
-        onFinish={onFinish}
+        onFinish={(password) => onFinish(password)}
         onFinishFailed={onFinishFailed}
         className="login-form"
       >

@@ -5,17 +5,41 @@ import { Avatar, Form, Button, Layout, Typography, message, Upload } from 'antd'
 import { Link } from 'react-router-dom'
 import { UserOutlined } from '@ant-design/icons'
 import { changeAvatar } from '../../api/service'
+import { create } from 'zustand'
 const { Paragraph } = Typography
 
-export const Profile = () => {
-  const [user, setUser] = useState(null)
-  const [fields, setFields] = useState({
+export const useProfileStore = create((set) => ({
+  user: null,
+  fields: {
     email: '',
     fullname: '',
     password: '',
     phone: '',
     avatarFile: null,
-  })
+  },
+  setUser: (user) => set({ user }),
+  setFields: (fields) => set({ fields }),
+  handleAvatarChange: (event) =>
+    set({ fields: { ...fields, avatarFile: event.target.files[0] } }),
+  updateUser: async (fields) => {
+    try {
+      await axios.put(`/users/${localStorage.getItem('id')}`, {
+        email: fields.email,
+        fullname: fields.fullname,
+        password: fields.password,
+        phone: fields.phone,
+      })
+      message.success('User updated successfully')
+    } catch (error) {
+      message.error('Error updating user')
+      console.log('Error updating user:', error)
+    }
+  },
+}))
+
+export const Profile = () => {
+  const { user, setUser, fields, setFields, handleAvatarChange, updateUser } =
+    useProfileStore()
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -36,26 +60,6 @@ export const Profile = () => {
     }
     fetchUser()
   }, [])
-
-  const handleAvatarChange = async (event) => {
-    const file = event.target.files[0]
-    setFields({ ...fields, avatarFile: file })
-  }
-
-  const updateUser = async () => {
-    try {
-      await axios.put(`/users/${localStorage.getItem('id')}`, {
-        email: fields.email,
-        fullname: fields.fullname,
-        password: fields.password,
-        phone: fields.phone,
-      })
-      message.success('User updated successfully')
-    } catch (error) {
-      message.error('Error updating user')
-      console.log('Error updating user:', error)
-    }
-  }
 
   return (
     <Layout className="profile-layout">
@@ -134,7 +138,11 @@ export const Profile = () => {
             </Paragraph>
           </Form.Item>
           <Form.Item>
-            <Button className="back-button" type="primary" onClick={updateUser}>
+            <Button
+              className="back-button"
+              type="primary"
+              onClick={() => updateUser(fields)}
+            >
               Save Changes
             </Button>
             <Link to="/">

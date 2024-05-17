@@ -9,10 +9,17 @@ import { FilesTable } from '../../component/filesTable/filesTable'
 const { Content, Sider } = Layout
 import { Layout, Menu } from 'antd'
 
+import { create } from 'zustand'
+
+export const useHomeStore = create((set) => ({
+  users: [],
+  setUsers: (users) => set({ users }),
+}))
+
 const Home = () => {
-  const [users, setUsers] = useState([])
   const [selectedMenuItem, setSelectedMenuItem] = useState('1')
   const token = localStorage.getItem('token')
+  const { users, setUsers } = useHomeStore()
 
   function handleMenuClick(item) {
     setSelectedMenuItem(item.key)

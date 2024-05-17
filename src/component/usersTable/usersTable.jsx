@@ -13,17 +13,50 @@ import {
   Upload,
 } from 'antd'
 import { CopyOutlined } from '@ant-design/icons'
+import { create } from 'zustand'
+import './usersTable.css'
 
 const { Content } = Layout
 const { Search } = Input
-import './usersTable.css'
+
+const useUsersTableStore = create((set, get) => ({
+  searchText: '',
+  avatarFile: null,
+  editingUser: null,
+  modalVisible: false,
+  setModalVisible: (modalVisible) => set({ modalVisible }),
+  setEditingUser: (editingUser) => set({ editingUser }),
+  setSearchText: (searchText) => set({ searchText }),
+  setAvatarFile: (avatarFile) => set({ avatarFile }),
+  handleUserClick: (user) => {
+    set({ editingUser: user })
+    set({ modalVisible: true })
+  },
+  copyText: (text) => {
+    navigator.clipboard.writeText(text)
+    message.success('Text copied to clipboard')
+  },
+}))
 
 export const UsersTable = ({ users, columns, onDelete }) => {
-  const token = localStorage.getItem('token')
-  const [searchText, setSearchText] = useState('')
-  const [avatarFile, setAvatarFile] = useState(null)
-  const [editingUser, setEditingUser] = useState(null)
-  const [modalVisible, setModalVisible] = useState(false)
+  const {
+    searchText,
+    avatarFile,
+    editingUser,
+    modalVisible,
+    setModalVisible,
+    setEditingUser,
+    setSearchText,
+    setAvatarFile,
+    handleUserClick,
+    copyText,
+  } = useUsersTableStore()
+
+  const closeModal = () => {
+    setModalVisible(false)
+    setEditingUser(null)
+    setAvatarFile(null)
+  }
 
   const handleDeleteMemoized = useCallback(
     async (user) => {
@@ -31,7 +64,7 @@ export const UsersTable = ({ users, columns, onDelete }) => {
         title: 'Confirm',
         content: `Are you sure you want to delete user ${user.fullname}?`,
         async onOk() {
-          if (token === user.fullname) {
+          if (localStorage.getItem('token') === user.fullname) {
             message.error('You cannot delete yourself.')
           } else {
             await onDelete(user)
@@ -42,7 +75,7 @@ export const UsersTable = ({ users, columns, onDelete }) => {
         onCancel() {},
       })
     },
-    [token, onDelete]
+    [onDelete]
   )
 
   const handleUpdateUserMemoized = useCallback(async () => {
@@ -55,44 +88,7 @@ export const UsersTable = ({ users, columns, onDelete }) => {
     await updateUser(editingUser.id, editingUser)
     closeModal()
     message.success(`User ${editingUser.fullname} updated successfully.`)
-  }, [avatarFile, editingUser])
-
-  const filteredData = useMemo(() => {
-    return users.filter((user) =>
-      Object.values(user).some(
-        (val) =>
-          val && val.toString().toLowerCase().includes(searchText.toLowerCase())
-      )
-    )
-  }, [users, searchText])
-
-  const closeModal = () => {
-    setModalVisible(false)
-    setEditingUser(null)
-    setAvatarFile(null)
-  }
-
-  const handleSearch = (value) => {
-    setSearchText(value)
-  }
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target
-    setEditingUser((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }))
-  }
-
-  const handleUserClick = (user) => {
-    setEditingUser({ ...user })
-    setModalVisible(true)
-  }
-
-  const copyText = (type) => {
-    navigator.clipboard.writeText(type)
-    message.success('Full Name copied to clipboard')
-  }
+  }, [avatarFile, editingUser, closeModal])
 
   const columnsWithActions = [
     ...columns,
@@ -109,6 +105,15 @@ export const UsersTable = ({ users, columns, onDelete }) => {
     },
   ]
 
+  const filteredData = useMemo(() => {
+    return users.filter((user) =>
+      Object.values(user).some(
+        (val) =>
+          val && val.toString().toLowerCase().includes(searchText.toLowerCase())
+      )
+    )
+  }, [users, searchText])
+
   return (
     <div>
       <Layout className="users-table-layout">
@@ -118,7 +123,7 @@ export const UsersTable = ({ users, columns, onDelete }) => {
               placeholder="Search by name"
               allowClear
               enterButton={<SearchOutlined />}
-              onSearch={handleSearch}
+              onSearch={(value) => setSearchText(value)}
             />
           </Space>
           <Table
@@ -174,7 +179,12 @@ export const UsersTable = ({ users, columns, onDelete }) => {
                     <Input
                       name="phone"
                       value={editingUser.phone}
-                      onChange={handleInputChange}
+                      onChange={(e) => {
+                        setEditingUser({
+                          ...editingUser,
+                          phone: e.target.value,
+                        })
+                      }}
                     />
                     <Button
                       type="text"
@@ -191,7 +201,12 @@ export const UsersTable = ({ users, columns, onDelete }) => {
                     <Input
                       name="fullname"
                       value={editingUser.fullname}
-                      onChange={handleInputChange}
+                      onChange={(e) => {
+                        setEditingUser({
+                          ...editingUser,
+                          fullname: e.target.value,
+                        })
+                      }}
                     />
                     <Button
                       type="text"
@@ -208,7 +223,12 @@ export const UsersTable = ({ users, columns, onDelete }) => {
                     <Input
                       name="email"
                       value={editingUser.email}
-                      onChange={handleInputChange}
+                      onChange={(e) => {
+                        setEditingUser({
+                          ...editingUser,
+                          email: e.target.value,
+                        })
+                      }}
                     />
                     <Button
                       type="text"
