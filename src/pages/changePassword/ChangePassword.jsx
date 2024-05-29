@@ -1,5 +1,4 @@
 import React from 'react'
-import './changePassword.css'
 import axios from '../../api/axios'
 import { onFinishFailed } from '../../api/service'
 import { Form, Input, Button, message } from 'antd'
@@ -26,7 +25,7 @@ export const ChangePassword = () => {
     window.location.href = '/'
   }
   return (
-    <div className="login-container">
+    <div className="flex justify-center items-center mt-[150px]">
       <Form
         name="basic"
         initialValues={{ remember: true }}
@@ -40,7 +39,7 @@ export const ChangePassword = () => {
         <Form.Item
           label="Password"
           name="password"
-          className="form-new-password"
+          className="mt-5"
           rules={[
             { required: true, message: 'Please input your new password!' },
           ]}
@@ -48,7 +47,7 @@ export const ChangePassword = () => {
           <Input.Password placeholder="******" />
         </Form.Item>
         <Form.Item>
-          <Button className="submit-button" type="primary" htmlType="submit">
+          <Button className="w-[100%]" type="primary" htmlType="submit">
             Submit
           </Button>
         </Form.Item>

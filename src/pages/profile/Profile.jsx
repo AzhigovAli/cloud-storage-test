@@ -1,5 +1,5 @@
 import './profile.css'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import axios from '../../api/axios'
 import { Avatar, Form, Button, Layout, Typography, message, Upload } from 'antd'
 import { Link } from 'react-router-dom'
@@ -62,21 +62,21 @@ export const Profile = () => {
   }, [])
 
   return (
-    <Layout className="profile-layout">
-      <div className="login-container">
+    <Layout className="pt-[12px] pb-[12px]  bg-[#ffffff] rounded-[8px]">
+      <div className="flex justify-center items-center mt-[150px]">
         <Form
           name="basic"
           initialValues={{ remember: true }}
-          className="login-form"
+          className="w-[325px] p-5 border border-[#d9d9d9] rounded-[5px] bg-[#f0f2f5]"
         >
           {fields.avatarFile ? (
             <Avatar
-              className="user-avatar"
+              className="user-avatar text-[#f56a00] bg-[#fde3cf]"
               src={URL.createObjectURL(fields.avatarFile)}
             />
           ) : (
             <Avatar
-              className="user-avatar"
+              className="user-avatar text-[#f56a00] bg-[#fde3cf]"
               icon={<UserOutlined />}
               preview={false}
               src={user?.userAvatar}
@@ -98,7 +98,7 @@ export const Profile = () => {
           </Form.Item>
           <Form.Item label="Email">
             <Paragraph
-              className="data-user"
+              className="pt-[5px]"
               editable={{
                 onChange: (value) => setFields({ ...fields, email: value }),
               }}
@@ -108,7 +108,7 @@ export const Profile = () => {
           </Form.Item>
           <Form.Item label="Full Name">
             <Paragraph
-              className="data-user"
+              className="pt-[5px]"
               editable={{
                 onChange: (value) => setFields({ ...fields, fullname: value }),
               }}
@@ -118,7 +118,7 @@ export const Profile = () => {
           </Form.Item>
           <Form.Item label="Password">
             <Paragraph
-              className="data-user"
+              className="pt-[5px]"
               editable={{
                 onChange: (value) => setFields({ ...fields, password: value }),
               }}
@@ -128,7 +128,7 @@ export const Profile = () => {
           </Form.Item>
           <Form.Item label="Phone">
             <Paragraph
-              className="data-user"
+              className="pt-[5px]"
               editable={{
                 onChange: (value) => setFields({ ...fields, phone: value }),
               }}
@@ -139,14 +139,14 @@ export const Profile = () => {
           </Form.Item>
           <Form.Item>
             <Button
-              className="back-button"
+              className="w-[100%] mt-[10px]"
               type="primary"
               onClick={() => updateUser(fields)}
             >
               Save Changes
             </Button>
             <Link to="/">
-              <Button className="back-button">Back</Button>
+              <Button className="w-[100%] mt-[10px]">Back</Button>
             </Link>
           </Form.Item>
         </Form>

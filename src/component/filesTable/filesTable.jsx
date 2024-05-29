@@ -67,8 +67,8 @@ export const FilesTable = () => {
 
   return (
     <div>
-      <Layout className="files-table-layout">
-        <Content className="files-table-content">
+      <Layout className="pt-[12px] pb-[12px] rounded-[10px]">
+        <Content className="pl-[24px] pr-[24px] min-h-[280px] overflow-auto">
           <Upload
             action="http://localhost:5555/file"
             listType="picture-card"

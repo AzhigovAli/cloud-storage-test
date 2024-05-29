@@ -1,24 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 body {
   padding: 0;
   margin: 0 auto;
-}
-
-.header-text {
-  color: #fff;
-  font-size: 28px;
-}
-
-.user-name {
-  color: #fff;
-}
-
-.user-avatar {
-  color: #f56a00;
-  background-color: #fde3cf;
-}
-
-.user_avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
 }

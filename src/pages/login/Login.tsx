@@ -1,4 +1,3 @@
-import './login.css'
 import axios from '../../api/axios'
 import React, { useState } from 'react'
 import { onFinishFailed } from '../../api/service'
@@ -25,16 +24,16 @@ export const Login = () => {
   }
 
   return (
-    <div className="login-container">
+    <div className="flex justify-center items-center mt-[150px]">
       <Form
         name="basic"
         initialValues={{ remember: true }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
-        className="login-form"
+        className="w-[325px] p-5 border border-[#d9d9d9] rounded-[5px] bg-[#f0f2f5]"
       >
-        <div className="toggle-container">
-          <span>
+        <div className="flex mb-[20px]">
+          <span className="mr-[10px]">
             {isRegistering
               ? 'Already have an account?'
               : "Don't have an account yet?"}

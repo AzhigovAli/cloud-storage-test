@@ -17,22 +17,25 @@ const App = () => {
 
   return (
     <>
-      <Header className="header">
+      <Header className="flex items-center justify-between relative">
         <Link to="/">
-          <Typography strong className="header-text">
+          <Typography strong className="text-[#fff] text-[28px]">
             Cloud Storage
           </Typography>
         </Link>
         <Dropdown overlay={menu} placement="bottomRight">
-          <div className="login">
-            <Typography strong className="user-name">
+          <div className="gap-2 flex cursor-pointer items-center">
+            <Typography strong className="text-[#fff]">
               {token}
             </Typography>
             {originalname ? (
-              <img src={originalname} className="user_avatar" />
+              <img
+                src={originalname}
+                className="w-[40px] h-[40px] rounded-[50%]"
+              />
             ) : (
               <Avatar
-                className="user-avatar"
+                className="text-[#f56a00] bg-[#fde3cf]"
                 icon={<UserOutlined />}
                 preview={false}
               />

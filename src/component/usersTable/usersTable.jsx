@@ -116,9 +116,9 @@ export const UsersTable = ({ users, columns, onDelete }) => {
 
   return (
     <div>
-      <Layout className="users-table-layout">
-        <Content className="users-table-content">
-          <Space className="space">
+      <Layout className="pt-[12px] pb-[12px] rounded-[10px]">
+        <Content className="min-h-[280px] pl-[24px] pr-[24px]">
+          <Space className="mb-[16px]">
             <Search
               placeholder="Search by name"
               allowClear
